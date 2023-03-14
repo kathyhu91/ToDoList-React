@@ -1,88 +1,116 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 
-const dummyUserName = 'Tina';
-const dummyTodos = [
-  {
-    title: 'Learn react-router',
-    isDone: true,
-    id: 1,
-  },
-  {
-    title: 'Learn to create custom hooks',
-    isDone: false,
-    id: 2,
-  },
-  {
-    title: 'Learn to use context',
-    isDone: true,
-    id: 3,
-  },
-  {
-    title: 'Learn to implement auth',
-    isDone: false,
-    id: 4,
-  },
-];
+import { getTodos, createTodo, patchTodo, deleteTodo } from 'api/todos';
+
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from 'contexts/AuthContext'; // 引用封裝好的資訊
 
 const TodoPage = () => {
-  const [todos, setTodos] = useState(dummyTodos);
+  const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const todosNum = todos.length;
+
+  const navigate = useNavigate();
+
+  const { isAuthenticated, currentMember } = useAuth(); // 取出需要的狀態與方法
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [navigate, isAuthenticated]);
+
+  useEffect(() => {
+    const getTodosAsync = async () => {
+      try {
+        const todos = await getTodos();
+        setTodos(todos.map((todo) => ({ ...todo, isEdit: false })));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getTodosAsync();
+  }, []);
 
   const handleChange = (value) => {
     setInputValue(value);
   };
 
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (inputValue.length === 0) {
       return;
     }
-    setTodos((prevTodos) => {
-      return [
-        ...prevTodos,
-        {
-          id: Math.random() * 100,
-          title: inputValue,
-          isDone: false,
-        },
-      ];
-    });
-    setInputValue('');
-  };
-
-  const handleKeyDown = () => {
-    if (inputValue.length === 0) {
-      return;
-    }
-
-    setTodos((prevTodos) => {
-      return [
-        ...prevTodos,
-        {
-          id: Math.random() * 100,
-          title: inputValue,
-          isDone: false,
-        },
-      ];
-    });
-
-    setInputValue('');
-  };
-
-  const handleToggleDone = (id) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            isDone: !todo.isDone,
-          };
-        }
-        return todo;
+    try {
+      const data = await createTodo({
+        title: inputValue,
+        isDone: false,
       });
-    });
+      setTodos((prevTodos) => {
+        return [
+          ...prevTodos,
+          {
+            id: data.id,
+            title: data.title,
+            isDone: data.isDone,
+            isEdit: false,
+          },
+        ];
+      });
+      setInputValue('');
+    } catch (error) {
+      console.error(error);
+    }
   };
+  const handleKeyDown = async () => {
+    if (inputValue.length === 0) {
+      return;
+    }
+    try {
+      const data = await createTodo({
+        title: inputValue,
+        isDone: false,
+      });
+      setTodos((prevTodos) => {
+        return [
+          ...prevTodos,
+          {
+            id: data.id,
+            title: data.title,
+            isDone: data.isDone,
+            isEdit: false,
+          },
+        ];
+      });
+      setInputValue('');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleToggleDone = async (id) => {
+    const currentTodo = todos.find((todo) => todo.id === id);
+    try {
+      await patchTodo({
+        id,
+        isDone: !currentTodo.isDone,
+      });
+      setTodos((prevTodos) => {
+        return prevTodos.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              isDone: !todo.isDone,
+            };
+          }
+          return todo;
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChangeMode = ({ id, isEdit }) => {
     setTodos((prevTodos) => {
       return prevTodos.map((todo) => {
@@ -98,31 +126,37 @@ const TodoPage = () => {
     });
   };
 
-  const handleSave = ({ id, title }) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            id,
-            title,
-            isEdit: false,
-          };
-        }
-
-        return todo;
+  const handleSave = async ({ id, title }) => {
+    try {
+      await patchTodo({
+        id,
+        title,
       });
-    });
+      setTodos((prevTodos) => {
+        return prevTodos.map((todo) => {
+          if (todo.id === id) {
+            return { ...todo, title, isEdit: false };
+          }
+          return todo;
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDelete = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await deleteTodo(id);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   return (
     <div>
       TodoPage
-      <Header username={dummyUserName} />
+      <Header username={currentMember?.name} />
       <TodoInput
         inputValue={inputValue}
         onChange={handleChange}
