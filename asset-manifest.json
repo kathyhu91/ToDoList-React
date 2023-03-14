@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/ToDoList-React.git/static/css/main.4922d5c4.css",
-    "main.js": "/ToDoList-React.git/static/js/main.645ab8c8.js",
-    "static/js/787.17f4b47e.chunk.js": "/ToDoList-React.git/static/js/787.17f4b47e.chunk.js",
-    "static/media/ac-logo.svg": "/ToDoList-React.git/static/media/ac-logo.f4e0f3cb828663732e8d001491c2b394.svg",
-    "index.html": "/ToDoList-React.git/index.html",
-    "static/media/check-hover.svg": "/ToDoList-React.git/static/media/check-hover.5e00062bcf6cba5dbd8ad1a78066e429.svg",
-    "static/media/check-active.svg": "/ToDoList-React.git/static/media/check-active.95ca055ccb9b3ed7ac7e7719b388680e.svg",
-    "static/media/check-circle.svg": "/ToDoList-React.git/static/media/check-circle.30720b46020899b2d89e14826f4cc653.svg",
-    "main.4922d5c4.css.map": "/ToDoList-React.git/static/css/main.4922d5c4.css.map",
-    "main.645ab8c8.js.map": "/ToDoList-React.git/static/js/main.645ab8c8.js.map",
-    "787.17f4b47e.chunk.js.map": "/ToDoList-React.git/static/js/787.17f4b47e.chunk.js.map"
+    "main.css": "/ToDoList-React/static/css/main.4922d5c4.css",
+    "main.js": "/ToDoList-React/static/js/main.b60e1bb4.js",
+    "static/js/787.17f4b47e.chunk.js": "/ToDoList-React/static/js/787.17f4b47e.chunk.js",
+    "static/media/ac-logo.svg": "/ToDoList-React/static/media/ac-logo.f4e0f3cb828663732e8d001491c2b394.svg",
+    "index.html": "/ToDoList-React/index.html",
+    "static/media/check-hover.svg": "/ToDoList-React/static/media/check-hover.5e00062bcf6cba5dbd8ad1a78066e429.svg",
+    "static/media/check-active.svg": "/ToDoList-React/static/media/check-active.95ca055ccb9b3ed7ac7e7719b388680e.svg",
+    "static/media/check-circle.svg": "/ToDoList-React/static/media/check-circle.30720b46020899b2d89e14826f4cc653.svg",
+    "main.4922d5c4.css.map": "/ToDoList-React/static/css/main.4922d5c4.css.map",
+    "main.b60e1bb4.js.map": "/ToDoList-React/static/js/main.b60e1bb4.js.map",
+    "787.17f4b47e.chunk.js.map": "/ToDoList-React/static/js/787.17f4b47e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4922d5c4.css",
-    "static/js/main.645ab8c8.js"
+    "static/js/main.b60e1bb4.js"
   ]
 }
